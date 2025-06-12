@@ -14,11 +14,6 @@ func ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// mux := http.NewServeMux()
-
-	// mux.HandleFunc("/", ServeHTTP)
-	// mux.HandleFunc("/file", http.FileServer(r))
-
 	mux := http.FileServer(http.Dir("."))
 
 	server := &http.Server{
