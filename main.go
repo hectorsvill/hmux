@@ -7,21 +7,30 @@ import (
 	"time"
 )
 
-type HMuxHandler struct {}
+type HMuxHandler struct{}
 
-func (h HMuxHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello 42!\npath: %v", r.URL.Path)
 }
 
 func main() {
-	var hmuxHandler HMuxHandler
+	// mux := http.NewServeMux()
+
+	// mux.HandleFunc("/", ServeHTTP)
+	// mux.HandleFunc("/file", http.FileServer(r))
+
+	mux := http.FileServer(http.Dir("."))
+
 	server := &http.Server{
 		Addr:           ":8080",
-		Handler:        hmuxHandler,
+		Handler:        mux,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 
+
+
+	log.Println("Server starting on http://localhost:8080")
 	log.Fatal(server.ListenAndServe())
 }
